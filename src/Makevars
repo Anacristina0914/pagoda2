@@ -1,2 +1,18 @@
-PKG_CXXFLAGS=-I"./include" $(SHLIB_OPENMP_CXXFLAGS) 
-PKG_LIBS=-L/usr/lib/ -L"." -lpthread -lstdc++ -lm `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) $(SHLIB_OPENMP_CXXFLAGS)
+XCBASE:=$(shell xcrun --show-sdk-path)
+LLVMBASE:=$(shell brew --prefix llvm)
+GCCBASE:=$(shell brew --prefix gcc)
+GETTEXT:=$(shell brew --prefix gettext)
+
+CC=$(LLVMBASE)/bin/clang -fopenmp
+CXX=$(LLVMBASE)/bin/clang++ -fopenmp
+CXX11=$(LLVMBASE)/bin/clang++ -fopenmp
+CXX14=$(LLVMBASE)/bin/clang++ -fopenmp
+CXX17=$(LLVMBASE)/bin/clang++ -fopenmp
+CXX1X=$(LLVMBASE)/bin/clang++ -fopenmp
+
+CPPFLAGS=-isystem "$(LLVMBASE)/include" -isysroot "$(XCBASE)"
+LDFLAGS=-L"$(LLVMBASE)/lib" -L"$(GETTEXT)/lib" --sysroot="$(XCBASE)"
+
+FC=$(GCCBASE)/bin/gfortran -fopenmp
+F77=$(GCCBASE)/bin/gfortran -fopenmp
+FLIBS=-L$(GCCBASE)/lib/gcc/9/ -lm
